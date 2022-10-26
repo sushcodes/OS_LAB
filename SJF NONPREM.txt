@@ -1,0 +1,166 @@
+
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+#include <unistd.h>
+class Proc
+{
+    public:
+    int pid;
+    int arrivaltime;
+    int bursttime;
+    int waitingtime;
+    int completiontime;
+    int turnaroundtime;
+    int responsetime;
+    int starttime;
+    int used;
+    Proc(int p,int a, int b)
+    {
+        pid=p;
+        arrivaltime=a;
+        bursttime=b;
+        completiontime=-1;
+        turnaroundtime=-1;
+        responsetime=-1;
+        starttime=-1;
+        used=0;
+        waitingtime=-1;
+    }
+    
+    void update(int st,int rt,int tt,int wt,int ct)
+    {
+        used=1;
+        starttime=st;
+        responsetime=rt;
+        turnaroundtime=tt;
+        waitingtime=wt;
+        completiontime=ct;
+    }
+    
+};
+
+
+int main()
+{
+    cout<<"Enter The Number of process"<<endl;
+    int n;
+    cin>>n;
+    vector<Proc>v; // it creates bu default
+        int p;
+        int a;
+        int b;
+    for (int i=0;i<n;i++)
+    {
+        cout<<"ENTER PID , ARRIVAL TIME,BURST TIME"<<endl;
+        cin>>p>>a>>b;
+        v.push_back(Proc(p,a,b));
+    }
+    
+    float totaltat=0;
+    float totalwt=0;
+    
+    
+    int currenttime=0;
+    int completed=0;
+    while(completed!=n)
+    {
+        int index=-1;
+        int currentbt=INT_MAX;
+        for (int i=0;i<n;i++)
+        {
+            if (v[i].used==1 || v[i].arrivaltime>currenttime)
+            continue;
+            
+            if (v[i].arrivaltime<=currenttime)
+            {
+                if (v[i].bursttime<currentbt)
+                {
+                    index=i;
+                    currentbt=v[i].bursttime;
+                }
+                else if (v[i].bursttime==currentbt)
+                {
+                    
+                    if (v[i].arrivaltime<v[index].arrivaltime)
+                    {
+                        index=i;
+                    }
+                    else if (v[i].arrivaltime=v[index].arrivaltime)
+                    {
+                        if (v[i].pid<v[index].pid)
+                        index=i;
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        if (index!=-1)
+    {
+        int starttime=currenttime;
+        int completiontime=currenttime+v[index].bursttime;
+        int turnaroundtime=completiontime-v[index].arrivaltime;
+        int waitingtime=turnaroundtime-v[index].bursttime;
+        int responsetime=starttime-v[index].arrivaltime;
+        v[index].update(starttime,responsetime,turnaroundtime,waitingtime,completiontime);
+        currenttime+=v[index].bursttime;
+        totaltat+=turnaroundtime;
+        totalwt+=waitingtime;
+        completed++;
+    }
+    else
+    currenttime++;
+    }
+    
+    cout<<totalwt<<" "<<totalwt/n<<endl;
+    cout<<totaltat<<" "<<totaltat/n<<endl;
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+5
+1 2 6
+2 5 2
+3 1 8
+4 0 3
+5 4 4
+
+
+
+
+
+
+
+
+
+INSPIRED BY ->
+completed = 0
+current_time = 0
+while(completed != n) {
+    find process with minimum burst time among process that are in ready queue at current_time
+    if(process found) {
+        start_time = current_time
+        completion_time  = start_time + burst_time
+        turnaround_time = completion_time - arrival_time
+        waiting_time = turnaround_time - burst_time
+        response_time = start_time - arrival_time
+
+        mark process as completed
+        completed++
+        current_time = completion_time
+    }
+    else {
+        current_time++
+    }
+}

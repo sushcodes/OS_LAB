@@ -100,8 +100,114 @@ cout<<"WELCOME USER! WE'LL BE IMPLEMENTING FCFS"<<endl;
 	
 	
 	cout<<total<<endl;
-	cout<<total/5;
+	cout<<total/n;
 	
 	
 	return 0;
 }
+
+
+alternate
+
+#include <stdio.h>
+#include <unistd.h>
+using namespace std;
+#include <bits/stdc++.h>
+
+int main(){
+	
+	
+	int n;
+	cin>>n;
+	
+	int p[n] ,at[n] ,bt[n] ,tat[n] , wt[n] , ct[n];
+	int Ttat=0 , Twt=0, temp;
+	for (int i=0;i<n;i++)
+	{
+	    
+	    cout<<"--------"<<" ENTER DETAILS OF PROCESS "<<i+1<<endl;
+	    cout<<endl;
+	    cout<<"ENTER ProcessId, ARRIVAL TIME AND BURST TIME"<<endl;
+	    cin>>p[i]>>at[i]>>bt[i];
+	    cout<<endl;
+	}
+	
+	
+for (int i=0;i<n;i++)
+	{
+	    int pos=i;
+	    for (int j=i+1;j<n;j++)
+	    {
+	        if (at[j]<at[pos])
+	        {
+	            pos=j;
+	        }
+	        else if (at[j]==at[pos])
+	        {
+	          if (p[pos]>p[j])
+	          {
+	              pos=j;
+	          }
+	        }
+	    }
+	    
+	    if (pos!=i)
+	    {
+	       int t=at[i];
+	       at[i]=at[pos];
+	       at[pos]=t;
+	       
+	       t=p[i];
+	       p[i]=p[pos];
+	       p[pos]=t;
+	       
+	       t=bt[i];
+	       bt[i]=bt[pos];
+	       bt[pos]=t;
+	       
+	    }
+	    
+	}
+	
+	ct[0] = at[0] + bt[0];	// First Process Completion time
+	
+	for(int i =1 ; i< n ;i++){
+		temp = 0;
+		if(ct[i-1] < at[i])
+			temp = at[i] - ct[i-1];
+		
+		ct[i] = ct[i-1] + bt[i] + temp;	
+	}
+	
+		
+	
+	for(int i=0 ; i<n ;i++){
+		tat[i] =ct[i] - at[i];
+		wt[i] =tat[i] - bt[i]; 
+		Ttat += tat[i];
+		Twt += wt[i]; 
+	}
+	
+	int avgtat = Ttat/n; 
+	int avgwt = Twt/n;
+	
+	cout<<"Pid"<<"  "<<"AT"<<" "<<" BT "<<" CT "<<" WT"<<endl;
+	
+	for (int i=0;i<n;i++)
+	{
+	    cout<<p[i]<<"    "<<at[i]<<"    "<<bt[i]<<"   "<<ct[i]<<"   "<<wt[i]<<endl;
+	}
+    	
+    	printf("\n%d %d",avgtat ,avgwt);
+
+return 0;
+}
+
+
+TEST CASE:
+5
+5 4 4
+4 0 3
+3 1 8
+2 5 2
+1 2 6

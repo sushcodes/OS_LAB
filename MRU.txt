@@ -1,0 +1,101 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    // implementing MRU -> remove the one which was used recently!
+    // we maintain counter for time
+    // REMOVE THE ONE WHICH WAS USED EARLIEST!
+    
+    int n;int fs;
+    cout<<"ENTER REFERENCE STRING SIZE \n";
+    cin>>n;
+    int ref[n];
+    int countfault=0;
+    int counthits=0;
+    for (int i=0;i<n;i++)
+    cin>>ref[i];
+    cout<<"ENTER FRAME SIZE"<<endl;
+    cin>>fs;
+    
+    int used[fs];
+    int timee[fs];
+    for (int i=0;i<fs;i++)
+    used[i]=timee[i]=-1;
+    
+    
+    int counter=0;
+    for (int i=0;i<n;i++)
+    {
+        counter++; // time of appearance!
+        
+        int foundpos=-1;
+        for (int k=0;k<fs;k++)
+        {
+            if (used[k]==ref[i])
+            {
+                foundpos=k;
+                break;
+            }
+            
+        }
+        
+        if (foundpos!=-1)
+        {
+            timee[foundpos]=counter;
+            cout<<"HIT IS THERE"<<endl;
+            counthits++;
+        }
+        else
+        {
+             cout<<"MISS"<<endl;
+             countfault++;
+             
+            foundpos=-1;
+            for (int i=0;i<fs;i++)
+            {
+                if (used[i]==-1) //space is available
+                {
+                    foundpos=i;
+                    break;
+                }
+            }
+            if (foundpos!=-1)
+            {
+                
+                used[foundpos]=ref[i];
+                timee[foundpos]=counter;
+                continue;
+            }
+            
+            int maxi=INT_MIN;
+            for (int j=0;j<fs;j++)
+            {
+                if (timee[j]>maxi)
+                {
+                    maxi=timee[j];
+                    foundpos=j;
+                }
+            }
+            used[foundpos]=ref[i];
+            timee[foundpos]=counter;
+             }
+             
+             
+            
+        }
+    
+    
+    cout<<countfault<<endl;
+
+    return 0;
+}

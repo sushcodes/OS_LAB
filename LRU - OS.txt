@@ -1,0 +1,78 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    // implementing LRU -> remove the one which was not used recently!
+    // we maintain counter for time
+    // REMOVE THE ONE WHICH WAS USED LEAST EARLIEST!
+    
+    int n;int fs;
+    cout<<"ENTER REFERENCE STRING SIZE \n";
+    cin>>n;
+    int ref[n];
+    int countfault=0;
+    for (int i=0;i<n;i++)
+    cin>>ref[i];
+    cout<<"ENTER FRAME SIZE"<<endl;
+    cin>>fs;
+    
+    int used[fs];
+    int timee[fs];
+    for (int i=0;i<fs;i++)
+    used[i]=timee[i]=-1;
+    
+    
+    int counter=0;
+    for (int i=0;i<n;i++)
+    {
+        counter++; // time of appearance!
+        
+        int foundpos=-1;
+        for (int k=0;k<fs;k++)
+        {
+            if (used[k]==ref[i])
+            {
+                foundpos=k;
+                break;
+            }
+            
+        }
+        if (foundpos!=-1)
+        {
+            timee[foundpos]=counter;
+            cout<<"HIT IS THERE"<<endl;
+        }
+        else
+        {
+             cout<<"MISS"<<endl;
+             countfault++;
+            int mini=INT_MAX;
+            for (int j=0;j<fs;j++)
+            {
+                if (timee[j]<mini)
+                {
+                    mini=timee[j];
+                    foundpos=j;
+                }
+            }
+            used[foundpos]=ref[i];
+            timee[foundpos]=counter;
+        }
+        
+    }
+    
+    
+    cout<<countfault<<endl;
+
+    return 0;
+}

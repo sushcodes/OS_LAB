@@ -1,0 +1,54 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    
+//Seek Time:Seek time is the time taken to locate the disk arm to a specified
+//track where the data is to be read or write. So the disk scheduling algorithm 
+//that gives minimum average seek time is better.
+
+//Rotational Latency: Rotational Latency is the time taken by the desired sector of 
+//disk to rotate into a position so that it can access the read/write heads. So the disk 
+//scheduling algorithm that gives minimum rotational latency is better.
+
+//Transfer Time: Transfer time is the time to transfer the data. It depends on the rotating 
+//speed of the disk and number of bytes to be transferred.
+
+
+
+    int currentpos=-1;
+    int n;
+    cout<<"Enter current position "<<endl;
+    cin>>currentpos;
+    cout<<"ENTER NUMBER OF REQUESTS "<<endl;
+    cin>>n;
+    int a[n];
+    cout<<"ENTER REQUESTS ONE BY ONE"<<endl;
+    for (int i=0;i<n;i++)
+    cin>>a[i];
+    
+    int totalseektime=0;
+    for (int i=0;i<n;i++)
+    {
+        totalseektime+=abs(currentpos-a[i]);
+        currentpos=a[i];
+    }
+    cout<<totalseektime<<endl;
+    
+    
+
+    
+    
+
+    return 0;
+}

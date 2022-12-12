@@ -1,0 +1,151 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, PHP, Ruby, 
+C#, OCaml, VB, Perl, Swift, Prolog, Javascript, Pascal, HTML, CSS, JS
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <stdio.h>
+#include <bits/stdc++.h>
+using namespace std;
+ /// sush was here lol
+class Process
+{
+    public:
+    int arrivaltime;
+    int pid;
+    int bursttime;
+    int remainingtime;
+    int ct;
+    int tat;
+    int rt;
+
+    void initialize(int pd,int at,int bt)
+    {
+        tat=-1;
+        ct=-1;
+        int rt=-1;
+        pid=pd;
+        bursttime=bt;
+        remainingtime=bt;
+        arrivaltime=at;
+    }
+};
+int main()
+{
+    int n;
+    cin>>n;
+    Process ARR[n];
+    cout<<"ENTER PID , ARRIVAL TIME AND BURST TIME FOR N PROCESSES"<<endl;
+    for (int i=0;i<n;i++)
+    {
+        cout<<"ENTER DETAILS OF "<<i+1<<"th"<<" process"<<endl;
+        int at,pid,bt;
+        cin>>pid;
+        cin>>at;
+        cin>>bt;
+        ARR[i].initialize(pid,at,bt);
+        cout<<endl;
+        
+        
+    }
+    cout<<" ENTER TIME QUANTUM "<<endl;
+    int tq;
+    cin>>tq;
+    
+    // now sorting it based on arrival TIME
+    for (int i=0;i<n-1;i++)
+    {
+        int index=i;
+        for (int j=i+1;j<n;j++)
+        {
+            if (ARR[j].arrivaltime<ARR[index].arrivaltime)
+            {
+                index=j;
+            }else if (ARR[j].arrivaltime==ARR[index].arrivaltime)
+            {
+                if (ARR[index].pid>ARR[j].pid)
+                {
+                    index=j;
+                }
+            }
+        }
+      
+        
+        
+         
+       
+        
+        Process obj=ARR[i];
+        ARR[i]=ARR[index];
+        ARR[index]=obj;
+        
+       
+    }
+    
+  //  for (int i=0;i<n;i++)
+  //  {
+//        cout<<ARR[i].pid<<" "<<ARR[i].arrivaltime<<endl;
+//    }
+    
+ int currenttime=0;
+ queue<int> q;
+ unordered_set<int> us; // tracks which all are in Q
+ currenttime=max(currenttime,ARR[0].arrivaltime);
+ q.push(0);
+ us.insert(0);
+ ARR[0].rt=currenttime;
+ int completed=0;
+ while(completed !=n)
+ {
+    int p=-1;
+  if (q.size()>0)
+  {
+     p=q.front();
+    q.pop();
+    cout<<"CURRENTLY EXECUTING   "<<ARR[p].pid<<endl;
+    if (ARR[p].rt==-1)
+    ARR[p].rt=currenttime;
+    
+    if (ARR[p].remainingtime<=tq)
+    {
+        currenttime+=ARR[p].remainingtime;
+        ARR[p].remainingtime=0;
+        ARR[p].ct=currenttime;
+        completed++;
+    }
+    else
+    {
+        currenttime+=tq;
+        ARR[p].remainingtime-=tq;
+    }
+  }
+  for (int i=0;i<n;i++)
+  {
+      if (us.find(i)!=us.end())
+      continue;
+      
+      if (ARR[i].arrivaltime<=currenttime && ARR[i].remainingtime>0)
+      {
+          us.insert(i);
+          q.push(i);
+      }
+  }
+  if (p!=-1 && ARR[p].remainingtime>0)
+  q.push(p);
+
+ }
+ 
+ int sum=0;
+ for (int i=0;i<n;i++)
+ {
+     ARR[i].tat=ARR[i].ct-ARR[i].arrivaltime;
+     sum+=ARR[i].tat;
+ }
+ cout<<sum/n<<endl;
+    
+    
+
+    return 0;
+}

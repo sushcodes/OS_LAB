@@ -1,0 +1,98 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+class Process
+{
+    public:
+    int pid;
+    int arrivaltime;
+    int bursttime;
+    int responsetime;
+    int ct;
+    int tat;
+    int wt;
+    bool used;
+    
+    void initialize(int pi,int at,int bt)
+    {
+        pid=pi;
+        arrivaltime=at;
+        bursttime=bt;
+        used=false;
+        ct=tat=wt=responsetime=-1;
+    }
+    
+    
+};
+
+int main()
+{
+    int n;
+    float totaltat=0;
+    float totalwt=0;
+    cout<<"ENTER NUMBER OF PROCESSES"<<endl;
+    cin>>n;
+    Process ARR[n];
+    cout<<"ENTER PID,ARRIVALTIME,BURSTTIME"<<endl;
+    for (int i=0;i<n;i++)
+    {
+        int a,b,p;
+        cin>>p>>a>>b;
+        ARR[i].initialize(p,a,b);
+    }
+    
+    int currenttime=0;
+    int completed=0;
+    while(completed!=n)
+    {
+        int index=-1;
+        int mini=99999999;
+       for (int i=0;i<n;i++)
+       {
+           if (ARR[i].used || ARR[i].arrivaltime>currenttime)
+           continue;
+           
+           if (ARR[i].arrivaltime<mini)
+           {
+               mini=ARR[i].arrivaltime;
+               index=i;
+           }
+           else if (ARR[i].arrivaltime==mini)
+           {
+               if (ARR[i].pid<ARR[index].pid)
+               {
+                   index=i;
+               }
+           }
+           
+       }
+       if (index==-1)
+       currenttime++;
+       else
+       {
+           ARR[index].responsetime=currenttime-ARR[index].arrivaltime;
+           currenttime+=ARR[index].bursttime;
+           ARR[index].ct=currenttime;
+           ARR[index].tat=currenttime-ARR[index].arrivaltime;
+           completed++;
+           ARR[index].used=true;
+           totaltat+=currenttime-ARR[index].arrivaltime;
+           totalwt+=currenttime-ARR[index].arrivaltime-ARR[index].bursttime;
+       }
+        
+    }
+    
+    
+    cout<<totaltat/n<<endl;
+    cout<<totalwt/n<<endl;
+
+    return 0;
+}

@@ -1,0 +1,128 @@
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+    int n;int fs;
+    cout<<"ENTER REFERENCE STRING SIZE \n";
+    cin>>n;
+    int ref[n];
+    int counter=0;
+    int countfault=0;
+    int counthits=0;
+    for (int i=0;i<n;i++)
+    cin>>ref[i];
+    cout<<"ENTER FRAME SIZE"<<endl;
+    cin>>fs;
+    
+    int used[fs];
+    int timee[fs];
+    vector<vector<int>> dp(fs,vector<int> (n,-1));
+    
+    for (int i=0;i<fs;i++)
+    used[i]=timee[i]=-1;
+    
+    
+    for (int i=0;i<n;i++) // this is somewhat column wise
+    {
+        
+      
+        
+        counter++;
+        bool found=false;
+        int pos=-1;
+        for (int k=0;k<fs;k++)
+        {
+            if (ref[i]==used[k])
+            {
+                found=true;
+                continue;
+            }
+            if (used[k]==-1)
+            {
+                pos=k;
+            }
+        }
+        if (found)
+        {
+            counthits++;
+             for (int k=0;k<fs;k++)
+       {
+           dp[k][i]=used[k];
+       }
+            continue;
+        }
+        countfault++;
+        if (pos!=-1)
+        {
+            used[pos]=ref[i];
+            timee[pos]=counter;
+             for (int k=0;k<fs;k++)
+       {
+           dp[k][i]=used[k];
+       }
+            continue;
+        }
+        
+        // now replacement will occur
+        
+        int fcfsreplacement=-1;
+        int farthestreplacement=-1;
+        int fcfsreplacementtime=10000;
+        int farthestreplacementdistance=0;
+        
+        for (int k=0;k<fs;k++)
+        {
+            int j=-1;
+            for ( j=i+1;j<n;j++)
+            {
+                if (ref[j]==used[k])
+                {
+                    if (j-i>farthestreplacementdistance)
+                    {
+                        farthestreplacementdistance=j-i;
+                        farthestreplacement=k;
+                        break;
+                    }
+                }
+            }
+            if (j==n)
+            {
+                if (fcfsreplacementtime>timee[k])
+                {
+                    fcfsreplacementtime=timee[k];
+                    fcfsreplacement=k;
+                }
+            }
+        }
+        if (fcfsreplacement!=-1)
+        {
+            used[fcfsreplacement]=ref[i];
+            timee[fcfsreplacement]=counter;
+        }
+        else if (farthestreplacement!=-1)
+        {
+             used[farthestreplacement]=ref[i];
+            timee[farthestreplacement]=counter;
+        }
+     for (int k=0;k<fs;k++)
+       {
+           dp[k][i]=used[k];
+       }
+        
+        
+    }
+ 
+ cout<<counthits<<endl;
+ cout<<countfault<<endl;
+    
+    for (int m=0;m<fs;m++)
+    {
+        for (int nn=0;nn<n;nn++)
+        {
+            cout<<dp[m][nn]<<"    ";
+        }
+        cout<<endl;
+    }
+
+    return 0;
+}

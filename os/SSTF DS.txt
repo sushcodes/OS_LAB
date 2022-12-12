@@ -1,0 +1,64 @@
+/******************************************************************************
+
+Welcome to GDB Online.
+GDB online is an online compiler and debugger tool for C, C++, Python, Java, PHP, Ruby, Perl,
+C#, OCaml, VB, Swift, Pascal, Fortran, Haskell, Objective-C, Assembly, HTML, CSS, JS, SQLite, Prolog.
+Code, Compile, Run and Debug online from anywhere in world.
+
+*******************************************************************************/
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+    
+// SSTF: In SSTF (Shortest Seek Time First), requests having shortest seek time are executed first.
+//So, the seek time of every request is calculated in advance in the queue and then they are scheduled 
+//according to their calculated seek time. As a result, the request near the disk arm will get executed first.
+//SSTF is certainly an improvement over FCFS as it decreases the average response time and increases the throughput of system
+
+    int currentpos=-1;
+    int n;
+    
+    cout<<"Enter current position "<<endl;
+    cin>>currentpos;
+    cout<<"ENTER NUMBER OF REQUESTS "<<endl;
+    cin>>n;
+    int a[n];
+    cout<<"ENTER REQUESTS ONE BY ONE"<<endl;
+    int maxi=0;
+    for (int i=0;i<n;i++)
+    {
+    cin>>a[i];
+    maxi=max(a[i],maxi);
+    }
+    int totalseektime=0;
+    int count=0;
+    while(count!=n)
+    {
+        int distance=maxi;
+        int pos=-1;
+        for (int i=0;i<n;i++)
+        {
+            if (a[i]==-1)
+            continue;
+            
+            if (abs(a[i]-currentpos)<distance)
+            {
+                distance=abs(a[i]-currentpos);
+                pos=i;
+            }
+        }
+        if (pos==-1)
+        break;
+        
+        count++;
+        cout<<"GOING TO "<<a[pos]<<endl;
+        totalseektime+=abs(currentpos-a[pos]);
+        currentpos=a[pos];
+        a[pos]=-1;
+    }
+    cout<<totalseektime<<endl;
+    return 0;
+}
